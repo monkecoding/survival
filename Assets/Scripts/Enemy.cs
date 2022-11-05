@@ -22,7 +22,6 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         moneybar = GameObject.Find("Money Bar");
         rb = GetComponent<Rigidbody2D>();
-        Debug.Log(magnitudes.Length);
     }
 
     void Update()
@@ -88,7 +87,7 @@ public class Enemy : MonoBehaviour
 
     void FindClosetWayPoint()
     {
-        
+        Debug.Log(magnitudes.Length);
 
         for (int i = 0; i < wayPoints.Length; i++)
         {
