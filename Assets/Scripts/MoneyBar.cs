@@ -11,8 +11,6 @@ public class MoneyBar : MonoBehaviour
     void Start()
     {
         scorebar = gameObject.GetComponent<TMP_Text>();
-        balance += 1000;
-
     }
 
     void Update()

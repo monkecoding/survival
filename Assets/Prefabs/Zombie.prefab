@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7708438296472308683}
   - component: {fileID: -4076313619578869412}
   - component: {fileID: 7708438296472308680}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Zombie
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -141,8 +141,3 @@ MonoBehaviour:
   money: 100
   speed: 1.5
   pushPower: 400
-  wayPonts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}

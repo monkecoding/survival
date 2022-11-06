@@ -30,15 +30,11 @@ public class ZombieSpawner : MonoBehaviour
     void WavesCounter()
     {
         killCounter++;
-        Debug.Log("Kill Counter: " + killCounter);
-        Debug.Log("Next Wave Limit: " + nextWavelimit);
-        Debug.Log("Spawn rate: " + spawnRate);
         waveCounter.GetComponent<TMP_Text>().text = "Wave: " + numberWave;
         if (killCounter == nextWavelimit * numberWave && numberWave < 21)
         {
             killCounter = 0;
             numberWave++;
-            Debug.Log("Current wave: " + numberWave);
         }
     }
 }

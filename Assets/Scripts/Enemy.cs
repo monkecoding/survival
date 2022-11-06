@@ -1,38 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 public class Enemy : MonoBehaviour
 {
     public int health = 50, damage = 5, money = 100;
     public float speed = 1.5f, pushPower = 400;
-    bool cd;
+    bool cd, inHouse;
     private IEnumerator cooldown;
-    public Transform[] wayPoints;
+    GameObject[] wayPoints;
     Rigidbody2D rb;
-    GameObject player, moneybar;
-    Vector2 moveDirection, knockDirection;
-    Vector2[] magnitudes;
+    GameObject player, moneybar, closeWayPoint;
+    Vector2 playerDirection, wayPointDirection, knockDirection;
+    Vector2[] magnitudesWayPoints;
+    float closeWayPointMagnitude;
 
 
 
     void Start()
     {
-        FindClosetWayPoint();
+        wayPoints = GameObject.FindGameObjectsWithTag("Way Point");
         player = GameObject.FindGameObjectWithTag("Player");
         moneybar = GameObject.Find("Money Bar");
+        magnitudesWayPoints = new Vector2[wayPoints.Length];
         rb = GetComponent<Rigidbody2D>();
+        FindClosetWayPoint();
     }
 
     void Update()
     {
         // Determine direction and moving
-        moveDirection = player.transform.position - this.transform.position;
+        playerDirection = player.transform.position - this.transform.position;
+        wayPointDirection = closeWayPoint.transform.position - this.transform.position;
+        GoToClose();
 
-        if (moveDirection.magnitude > 1)
-        {
-            transform.Translate(moveDirection.normalized * speed * Time.deltaTime);
-        }
+
+
 
         // Death condition
         if (health <= 0)
@@ -85,15 +90,47 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // Find way in house
     void FindClosetWayPoint()
     {
-        Debug.Log(magnitudes.Length);
 
+        // Initiating way points into magnitudes
         for (int i = 0; i < wayPoints.Length; i++)
         {
-            magnitudes[i] = gameObject.transform.position - wayPoints[i].transform.position;
-            Debug.Log("magnitude: " + magnitudes[i].magnitude);
+            magnitudesWayPoints[i] = gameObject.transform.position - wayPoints[i].transform.position;
         }
-        
+
+        closeWayPointMagnitude = magnitudesWayPoints.Select(x => x.magnitude).Min();
+
+        for (int i = 0; i < magnitudesWayPoints.Length; i++)
+        {
+            if(magnitudesWayPoints[i].magnitude == closeWayPointMagnitude)
+            {
+                closeWayPoint = wayPoints[i];
+                break;
+            }
+        }
+    }
+
+    // Way controller
+    void GoToClose()
+    {
+        if (wayPointDirection.magnitude > 0.1 && !inHouse)
+        {
+            transform.Translate(wayPointDirection.normalized * speed * Time.deltaTime);  
+        }
+        else
+        {
+            inHouse = true;
+            GoToPlayer();
+        }
+    }
+
+    void GoToPlayer()
+    {
+        if (playerDirection.magnitude > 1)
+        {
+            transform.Translate(playerDirection.normalized * speed * Time.deltaTime);
+        }
     }
 }

@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    int health = 100;
+    float health, maxHealth = 100;
     public bool immune;
+    public Image healthBar;
     private IEnumerator beImmune;
+
+    private void Awake()
+    {
+        health = maxHealth;
+    }
 
     public bool isImmune
     {
@@ -29,14 +37,24 @@ public class Player : MonoBehaviour
         {
         beImmune = Imune();
         health -= damageAmount;
-        Debug.Log("Player health is " + health);
+        healthBar.fillAmount = health / maxHealth;
+        CheckHealth();
         StartCoroutine(beImmune);
         }
+
     }
     private IEnumerator Imune()
     {
         isImmune = true;
         yield return new WaitForSeconds(0.2f);
         isImmune = false;
+    }
+    
+    private void CheckHealth()
+    {
+        if (health <= 0)
+        {
+            SceneManager.LoadScene("Game");
+        }
     }
 }
